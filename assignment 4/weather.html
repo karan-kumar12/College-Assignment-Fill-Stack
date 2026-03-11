@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Weather App</title>
+
+
+
+</head>
+<body>
+
+<h1>Weather Dashboard</h1>
+
+<div id="loading">Loading weather...</div>
+<div id="weather-container"></div>
+
+<script>
+
+const cities = [
+ {name:"Delhi", lat:28.61, lon:77.20},
+ {name:"London", lat:51.50, lon:-0.12},
+ {name:"Tokyo", lat:35.68, lon:139.69}
+];
+
+function getWeatherEmoji(code){
+
+ if(code === 0) return "☀️";
+ if(code <= 3) return "⛅";
+ if(code <= 48) return "🌫";
+ if(code <= 67) return "🌧";
+ if(code <= 77) return "❄️";
+ return "🌦";
+}
+
+function getCondition(code){
+
+ if(code === 0) return "Clear Sky";
+ if(code <= 3) return "Cloudy";
+ if(code <= 48) return "Fog";
+ if(code <= 67) return "Rain";
+ if(code <= 77) return "Snow";
+ return "Showers";
+}
+
+async function loadWeather(){
+
+ try{
+
+ const promises = cities.map(city =>
+   fetch(`https://api.open-meteo.com/v1/forecast?latitude=${city.lat}&longitude=${city.lon}&current_weather=true`)
+   .then(res => res.json())
+ );
+
+ const results = await Promise.all(promises);
+
+ document.getElementById("loading").style.display="none";
+
+ results.forEach((data,index)=>{
+
+ const weather = data.current_weather;
+
+ const card = `
+ <div class="card">
+   <h3>${cities[index].name}</h3>
+   <div class="emoji">${getWeatherEmoji(weather.weathercode)}</div>
+   <div class="temp">${weather.temperature}°C</div>
+   <p>${getCondition(weather.weathercode)}</p>
+ </div>
+ `;
+
+ document.getElementById("weather-container").innerHTML += card;
+
+ });
+
+ }catch(err){
+
+ document.getElementById("loading").innerText =
+ "⚠️ Failed to load weather data";
+
+ }
+
+}
+
+loadWeather();
+
+</script>
+
+</body>
+</html>
