@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple News App</title>
+    <style>
+        body{
+            font-family: Arial;
+            text-align: center;
+        }
+
+        #news-container{
+            width: 60%;
+            margin: auto;
+        }
+
+        .news{
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px;
+            text-align: left;
+        }
+
+        a{
+            text-decoration: none;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Tech News</h1>
+
+<input type="text" id="topic" placeholder="Enter topic">
+<button onclick="searchNews()">Search</button>
+
+<div id="news-container"></div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
